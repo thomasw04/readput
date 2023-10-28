@@ -1,9 +1,10 @@
 [package]
-name = "readput"
-version = "0.2.0"
+name = "readput_macros"
+version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[dependencies]
-readput_macros ={ path = "readput_macros"}
+[lib]
+crate-type = ["proc-macro"]
+proc-macro = true

@@ -1,4 +1,97 @@
-use std::{str::FromStr, fmt::Debug};
+use std::{str::FromStr, fmt::Debug, ffi::OsString};
+
+use readput_macros::impl_cin_type;
+
+impl_cin_type!(u8);
+impl_cin_type!(u16);
+impl_cin_type!(u32);
+impl_cin_type!(u64);
+impl_cin_type!(u128);
+impl_cin_type!(usize);
+
+impl_cin_type!(i8);
+impl_cin_type!(i16);
+impl_cin_type!(i32);
+impl_cin_type!(i64);
+impl_cin_type!(i128);
+impl_cin_type!(isize);
+
+impl_cin_type!(bool);
+impl_cin_type!(char);
+impl_cin_type!(f32);
+impl_cin_type!(f64);
+impl_cin_type!(String);
+
+pub trait Parseable {
+    type Ret;
+
+    fn parse(sc: &mut impl Scanner) -> Self::Ret;
+}
+
+impl<T0: FromStr, T1: FromStr> Parseable for (T0, T1) where 
+    T0::Err: Debug,
+    T1::Err: Debug
+{
+    type Ret = (T0, T1);
+
+    fn parse(sc: &mut impl Scanner) -> Self::Ret {
+        (sc.read_token().unwrap(), sc.read_token().unwrap())
+    }
+}
+
+impl<T0: FromStr, T1: FromStr, T2: FromStr> Parseable for (T0, T1, T2) where 
+    T0::Err: Debug,
+    T1::Err: Debug,
+    T2::Err: Debug
+{
+    type Ret = (T0, T1, T2);
+
+    fn parse(sc: &mut impl Scanner) -> Self::Ret {
+        (sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap())
+    }
+}
+
+impl<T0: FromStr, T1: FromStr, T2: FromStr, T3: FromStr> Parseable for (T0, T1, T2, T3) where 
+    T0::Err: Debug,
+    T1::Err: Debug,
+    T2::Err: Debug,
+    T3::Err: Debug
+{
+    type Ret = (T0, T1, T2, T3);
+
+    fn parse(sc: &mut impl Scanner) -> Self::Ret {
+        (sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap())
+    }
+}
+
+impl<T0: FromStr, T1: FromStr, T2: FromStr, T3: FromStr, T4: FromStr> Parseable for (T0, T1, T2, T3, T4) where 
+    T0::Err: Debug,
+    T1::Err: Debug,
+    T2::Err: Debug,
+    T3::Err: Debug,
+    T4::Err: Debug
+{
+    type Ret = (T0, T1, T2, T3, T4);
+
+    fn parse(sc: &mut impl Scanner) -> Self::Ret {
+        (sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap())
+    }
+}
+
+impl<T0: FromStr, T1: FromStr, T2: FromStr, T3: FromStr, T4: FromStr, T5: FromStr> Parseable for (T0, T1, T2, T3, T4, T5) where 
+    T0::Err: Debug,
+    T1::Err: Debug,
+    T2::Err: Debug,
+    T3::Err: Debug,
+    T4::Err: Debug,
+    T5::Err: Debug
+{
+    type Ret = (T0, T1, T2, T3, T4, T5);
+
+    fn parse(sc: &mut impl Scanner) -> Self::Ret {
+        (sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap())
+    }
+}
 
 pub trait Scanner {
     fn read_token<T: FromStr>(&mut self) -> Result<T, <T as FromStr>::Err>;
@@ -99,120 +192,21 @@ impl Scanner for AsciiScanner
     }
 }
 
-pub trait Parseable {
-    type Ret;
-
-    fn parse(sc: &mut impl Scanner) -> Self::Ret;
-}
-
-impl Parseable for u32 {
-    type Ret = u32;
-    fn parse(sc: &mut impl Scanner) -> Self::Ret {
-        sc.read_token().unwrap()
-    }
-}
-
-impl Parseable for i32 {
-    type Ret = i32;
-    fn parse(sc: &mut impl Scanner) -> Self::Ret {
-        sc.read_token().unwrap()
-    }
-}
-
-impl Parseable for u64 {
-    type Ret = u64;
-    fn parse(sc: &mut impl Scanner) -> Self::Ret {
-        sc.read_token().unwrap()
-    }
-}
-
-impl Parseable for i64 {
-    type Ret = i64;
-    fn parse(sc: &mut impl Scanner) -> Self::Ret {
-        sc.read_token().unwrap()
-    }
-}
-
-impl<T0: FromStr, T1: FromStr> Parseable for (T0, T1) where 
-    T0::Err: Debug,
-    T1::Err: Debug
-{
-    type Ret = (T0, T1);
-
-    fn parse(sc: &mut impl Scanner) -> Self::Ret {
-        (sc.read_token().unwrap(), sc.read_token().unwrap())
-    }
-}
-
-impl<T0: FromStr, T1: FromStr, T2: FromStr> Parseable for (T0, T1, T2) where 
-    T0::Err: Debug,
-    T1::Err: Debug,
-    T2::Err: Debug
-{
-    type Ret = (T0, T1, T2);
-
-    fn parse(sc: &mut impl Scanner) -> Self::Ret {
-        (sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap())
-    }
-}
-
-impl<T0: FromStr, T1: FromStr, T2: FromStr, T3: FromStr> Parseable for (T0, T1, T2, T3) where 
-    T0::Err: Debug,
-    T1::Err: Debug,
-    T2::Err: Debug,
-    T3::Err: Debug
-{
-    type Ret = (T0, T1, T2, T3);
-
-    fn parse(sc: &mut impl Scanner) -> Self::Ret {
-        (sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap())
-    }
-}
-
-impl<T0: FromStr, T1: FromStr, T2: FromStr, T3: FromStr, T4: FromStr> Parseable for (T0, T1, T2, T3, T4) where 
-    T0::Err: Debug,
-    T1::Err: Debug,
-    T2::Err: Debug,
-    T3::Err: Debug,
-    T4::Err: Debug
-{
-    type Ret = (T0, T1, T2, T3, T4);
-
-    fn parse(sc: &mut impl Scanner) -> Self::Ret {
-        (sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap())
-    }
-}
-
-impl<T0: FromStr, T1: FromStr, T2: FromStr, T3: FromStr, T4: FromStr, T5: FromStr> Parseable for (T0, T1, T2, T3, T4, T5) where 
-    T0::Err: Debug,
-    T1::Err: Debug,
-    T2::Err: Debug,
-    T3::Err: Debug,
-    T4::Err: Debug,
-    T5::Err: Debug
-{
-    type Ret = (T0, T1, T2, T3, T4, T5);
-
-    fn parse(sc: &mut impl Scanner) -> Self::Ret {
-        (sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap())
-    }
-}
-
 #[test]
 fn test() {
     let mut inp = AsciiScanner::new();
 
-    //Read a single value.
-    let a: u32 = inp.read(); //read_s because rust does not support negative trait bounds
+    //Read a single value. For non std types use impl_cin_type(type)! before.
+    let a: i128 = inp.read();
 
-    //Read a tuple with variable size and custom types (need to impl FromStr and Debug).
-    let (b, c, d): (String, u32, u32) = inp.read();
+    //Read a tuple with variable size and custom types (need to impl FromStr and Debug). Works with all types.
+    let (b, c, d): (String, i128, u32) = inp.read();
     let (e, f): (i32, i32) = inp.read();
 
-    //Read a vec of tuples. cnt is the number of tuples in the vector to read.
+    //Read a vec of tuples. cnt is the number of tuples in the vector to read. Works with all types.
     let vec: Vec<(u32, u32)> = inp.read_vec(3);
 
-    //Read a vec of non tuples. cnt is the number of elements to read.
+    //Read a vec of non tuples. cnt is the number of elements to read. For non std types use impl_cin_type(type)! before.
     let vec1: Vec<u32> = inp.read_vec(3);
 
     println!("{} {} {} {} {} {}", a, b, c, d, e, f);
