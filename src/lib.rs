@@ -1,4 +1,4 @@
-use std::{str::FromStr, fmt::Debug, ffi::OsString};
+use std::{str::FromStr, fmt::Debug};
 
 use readput_macros::impl_cin_type;
 
@@ -99,8 +99,8 @@ pub trait Scanner {
     fn read<T: Parseable<Ret = T>>(&mut self) -> T;
     fn read_cust_s<T: FromStr>(&mut self) -> T where T::Err: Debug;
 
-    fn read_vec<T: Parseable<Ret = T>>(&mut self, cnt: u32) -> Vec<T>;
-    fn read_cust_v<T: FromStr>(&mut self, cnt: u32) -> Vec<T> where T::Err: Debug;
+    fn read_vec<T: Parseable<Ret = T>>(&mut self, cnt: usize) -> Vec<T>;
+    fn read_cust_v<T: FromStr>(&mut self, cnt: usize) -> Vec<T> where T::Err: Debug;
 }
 
 //Faster scanner that will only work if Ascii characters are typed into stdin. 
@@ -171,8 +171,8 @@ impl Scanner for AsciiScanner
         self.read_token().unwrap()
     }
 
-    fn read_cust_v<T: FromStr>(&mut self, cnt: u32) -> Vec<T> where T::Err: Debug {
-        let mut v: Vec<T> = Vec::new();
+    fn read_cust_v<T: FromStr>(&mut self, cnt: usize) -> Vec<T> where T::Err: Debug {
+        let mut v: Vec<T> = Vec::with_capacity(cnt);
 
         for _i in 0..cnt {
             v.push(self.read_token::<T>().unwrap());
@@ -181,8 +181,8 @@ impl Scanner for AsciiScanner
         v
     }
 
-    fn read_vec<T: Parseable<Ret = T>>(&mut self, cnt: u32) -> Vec<T> {
-        let mut v: Vec<T> = Vec::new();
+    fn read_vec<T: Parseable<Ret = T>>(&mut self, cnt: usize) -> Vec<T> {
+        let mut v: Vec<T> = Vec::with_capacity(cnt);
 
         for _i in 0..cnt {
             v.push(T::parse(self));
