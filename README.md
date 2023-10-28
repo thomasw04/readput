@@ -3,6 +3,8 @@ Fast and easy stdin input parsing for competitive programming in rust.
 
 # Usage
 
+Add: ```readput = { git = "https://github.com/thomasw04/readput.git" }``` to your dependencies in Cargo.toml
+
 **Note:** The inputs can be on the same line, or not, it doesn't make a difference. They are separated by spaces or line breaks. Excess inputs are getting cached for the next ```read()``` call.
 
 ## Create a Scanner
