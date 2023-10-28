@@ -1,26 +1,46 @@
 use std::{str::FromStr, fmt::Debug};
+use seq_macro::seq;
 
-use readput_macros::impl_cin_type;
+macro_rules! impl_stdin_tuple {
+    ($cnt:literal) => {
+        seq!{N in 0..$cnt {
+            impl<#(T~N: FromStr,)*> Parseable for (#(T~N,)*) where
+                #(T~N::Err: Debug,)*
+            {
+                type Ret = (#(T~N,)*);
 
-impl_cin_type!(u8);
-impl_cin_type!(u16);
-impl_cin_type!(u32);
-impl_cin_type!(u64);
-impl_cin_type!(u128);
-impl_cin_type!(usize);
+                fn parse(sc: &mut impl Scanner) -> Self::Ret {
+                    (#(sc.read_token().unwrap(),)*)
+                }
+            }
+        }}
+    };
+}
 
-impl_cin_type!(i8);
-impl_cin_type!(i16);
-impl_cin_type!(i32);
-impl_cin_type!(i64);
-impl_cin_type!(i128);
-impl_cin_type!(isize);
+macro_rules! impl_all_stdin_tuples {
+    ($cnt:literal) => {
+        seq!{N in 2..$cnt {
+            #(impl_stdin_tuple!(N);)*
+        }}
+    };
+}
 
-impl_cin_type!(bool);
-impl_cin_type!(char);
-impl_cin_type!(f32);
-impl_cin_type!(f64);
-impl_cin_type!(String);
+macro_rules! impl_stdin_type {
+    ($type:ty) => {
+        impl Parseable for $type {
+            type Ret = $type;
+            fn parse(sc: &mut impl Scanner) -> Self::Ret {
+                sc.read_token().unwrap()
+            }
+        }
+    }
+}
+
+macro_rules! impl_stdin_types {
+    ($($type:ty),+) => {
+        $(impl_stdin_type!($type);)*
+    };
+}
 
 pub trait Parseable {
     type Ret;
@@ -28,70 +48,13 @@ pub trait Parseable {
     fn parse(sc: &mut impl Scanner) -> Self::Ret;
 }
 
-impl<T0: FromStr, T1: FromStr> Parseable for (T0, T1) where 
-    T0::Err: Debug,
-    T1::Err: Debug
-{
-    type Ret = (T0, T1);
+impl_stdin_types!(
+    u8, u16, u32, u64, u128, usize,
+    i8, i16, i32, i64, i128, isize,
+    bool, char, f32, f64, String
+);
 
-    fn parse(sc: &mut impl Scanner) -> Self::Ret {
-        (sc.read_token().unwrap(), sc.read_token().unwrap())
-    }
-}
-
-impl<T0: FromStr, T1: FromStr, T2: FromStr> Parseable for (T0, T1, T2) where 
-    T0::Err: Debug,
-    T1::Err: Debug,
-    T2::Err: Debug
-{
-    type Ret = (T0, T1, T2);
-
-    fn parse(sc: &mut impl Scanner) -> Self::Ret {
-        (sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap())
-    }
-}
-
-impl<T0: FromStr, T1: FromStr, T2: FromStr, T3: FromStr> Parseable for (T0, T1, T2, T3) where 
-    T0::Err: Debug,
-    T1::Err: Debug,
-    T2::Err: Debug,
-    T3::Err: Debug
-{
-    type Ret = (T0, T1, T2, T3);
-
-    fn parse(sc: &mut impl Scanner) -> Self::Ret {
-        (sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap())
-    }
-}
-
-impl<T0: FromStr, T1: FromStr, T2: FromStr, T3: FromStr, T4: FromStr> Parseable for (T0, T1, T2, T3, T4) where 
-    T0::Err: Debug,
-    T1::Err: Debug,
-    T2::Err: Debug,
-    T3::Err: Debug,
-    T4::Err: Debug
-{
-    type Ret = (T0, T1, T2, T3, T4);
-
-    fn parse(sc: &mut impl Scanner) -> Self::Ret {
-        (sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap())
-    }
-}
-
-impl<T0: FromStr, T1: FromStr, T2: FromStr, T3: FromStr, T4: FromStr, T5: FromStr> Parseable for (T0, T1, T2, T3, T4, T5) where 
-    T0::Err: Debug,
-    T1::Err: Debug,
-    T2::Err: Debug,
-    T3::Err: Debug,
-    T4::Err: Debug,
-    T5::Err: Debug
-{
-    type Ret = (T0, T1, T2, T3, T4, T5);
-
-    fn parse(sc: &mut impl Scanner) -> Self::Ret {
-        (sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap(), sc.read_token().unwrap())
-    }
-}
+impl_all_stdin_tuples!(16);
 
 pub trait Scanner {
     fn read_token<T: FromStr>(&mut self) -> Result<T, <T as FromStr>::Err>;
@@ -172,22 +135,10 @@ impl Scanner for AsciiScanner
     }
 
     fn read_cust_v<T: FromStr>(&mut self, cnt: usize) -> Vec<T> where T::Err: Debug {
-        let mut v: Vec<T> = Vec::with_capacity(cnt);
-
-        for _i in 0..cnt {
-            v.push(self.read_token::<T>().unwrap());
-        }
-
-        v
+        (0..cnt).map(|_| self.read_token::<T>().unwrap()).collect()
     }
 
     fn read_vec<T: Parseable<Ret = T>>(&mut self, cnt: usize) -> Vec<T> {
-        let mut v: Vec<T> = Vec::with_capacity(cnt);
-
-        for _i in 0..cnt {
-            v.push(T::parse(self));
-        }
-
-        v
+        (0..cnt).map(|_| T::parse(self)).collect()
     }
 }
