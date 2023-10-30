@@ -14,7 +14,7 @@ let mut cin = AsciiScanner::new();
 ```
 
 ## Read a single value
-Read a single value. For non std types use ```impl_cin_type(type)!``` before or use ```cin.read_cust_s()```.
+Read a single value. For non std types use ```impl_cin_type!(type)``` before or use ```cin.read_cust_s()```.
 **Note:** They also have to impl. FromStr and Debug. 
 ```Rust
 let v: i128 = cin.read();
@@ -34,14 +34,14 @@ let vec: Vec<(u32, String)> = cin.read_vec(3);
 ```
 
 ## Read a vector of single values
-Read a vector of single values. 3 is the number of elements to read. For non std types use ```impl_cin_type(type)!``` before or use ```cin.read_cust_v()```.
+Read a vector of single values. 3 is the number of elements to read. For non std types use ```impl_cin_type!(type)``` before or use ```cin.read_cust_v()```.
 **Note:** They also have to impl. FromStr and Debug. 
 ```Rust
 let vec: Vec<u32> = cin.read_vec(3);
 ```
 
 ## Iterate over input
-Iterate over input. This will iterate forever. (Blocks until new input is entered) For non std types use ```impl_cin_type(type)!``` before.
+Iterate over input. This will iterate forever. (Blocks until new input is entered) For non std types use ```impl_cin_type!(type)``` before.
 ```Rust
 for (a, b) in cin.iter::<(String, u32)>() {
     println!("{} {}", a, b);
