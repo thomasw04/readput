@@ -2,9 +2,6 @@
 Fast and easy stdin input parsing for competitive programming in rust.
 
 # Usage
-
-Add: ```readput = { git = "https://github.com/thomasw04/readput.git" }``` to your dependencies in Cargo.toml
-
 **Note:** The inputs can be on the same line, or not, it doesn't make a difference. They are separated by spaces or line breaks. Excess inputs are getting cached for the next ```read()``` call.
 
 ## Create a Scanner
@@ -20,7 +17,6 @@ let mut cin = AsciiScanner::new();
 Read a single value. For non std types use ```impl_cin_type(type)!``` before or use ```cin.read_cust_s()```.
 **Note:** They also have to impl. FromStr and Debug. 
 ```Rust
-
 let v: i128 = cin.read();
 ```
 

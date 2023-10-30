@@ -1,7 +1,12 @@
 [package]
 name = "readput"
-version = "0.2.0"
+description = "Fast and easy stdin input parsing for competitive programming in rust."
+version = "0.1.0"
 edition = "2021"
+authors = ["Thomas Wachter"]
+license = "BSD-3-Clause"
+repository = "https://github.com/thomasw04/readput"
+keywords = ["io", "stdin", "utility", "parsing", "input"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
