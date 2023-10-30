@@ -4,7 +4,7 @@ description = "Fast and easy stdin input parsing for competitive programming in 
 version = "0.1.0"
 edition = "2021"
 authors = ["Thomas Wachter"]
-license = "BSD-3-Clause"
+license-file = "LICENSE"
 repository = "https://github.com/thomasw04/readput"
 keywords = ["io", "stdin", "utility", "parsing", "input"]
 
