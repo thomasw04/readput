@@ -1,5 +1,5 @@
 # readput
-![crates.io](https://img.shields.io/crates/v/readput.svg)
+[<img alt="crates.io" src="https://img.shields.io/crates/v/readput.svg">](https://crates.io/crates/readput)
 
 Fast and easy stdin input parsing for competitive programming in rust.
 
