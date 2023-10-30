@@ -1,4 +1,6 @@
 # readput
+![crates.io](https://img.shields.io/crates/v/readput.svg)
+
 Fast and easy stdin input parsing for competitive programming in rust.
 
 # Usage
