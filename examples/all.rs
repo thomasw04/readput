@@ -19,6 +19,10 @@ fn main() {
 
     println!("{} {} {} {} {} {}", a, b, c, d, e, f);
 
+    for (a, b) in cin.iter::<(String, u32)>() {
+        println!("{} {}", a, b);
+    }
+
     for x in vec {
         println!("{} {}", x.0, x.1);
     }

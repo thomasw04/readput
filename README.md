@@ -43,3 +43,11 @@ Read a vector of single values. 3 is the number of elements to read. For non std
 ```Rust
 let vec: Vec<u32> = cin.read_vec(3);
 ```
+
+## Iterate over input
+Iterate over input. This will iterate forever. (Blocks until new input is entered) For non std types use ```impl_cin_type(type)!``` before.
+```Rust
+for (a, b) in cin.iter::<(String, u32)>() {
+    println!("{} {}", a, b);
+}
+```

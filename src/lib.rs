@@ -1,15 +1,15 @@
-use std::{str::FromStr, fmt::Debug};
+use std::{str::FromStr, fmt::Debug, marker::PhantomData};
 use seq_macro::seq;
 
 macro_rules! impl_stdin_tuple {
     ($cnt:literal) => {
         seq!{N in 0..$cnt {
-            impl<#(T~N: FromStr,)*> Parseable for (#(T~N,)*) where
+            impl<'a, #(T~N: FromStr,)*> Parseable<'a> for (#(T~N,)*) where
                 #(T~N::Err: Debug,)*
             {
                 type Ret = (#(T~N,)*);
 
-                fn parse(sc: &mut impl Scanner) -> Self::Ret {
+                fn parse(sc: &mut impl Scanner<'a>) -> Self::Ret {
                     (#(sc.read_token().unwrap(),)*)
                 }
             }
@@ -27,9 +27,9 @@ macro_rules! impl_all_stdin_tuples {
 
 macro_rules! impl_stdin_type {
     ($type:ty) => {
-        impl Parseable for $type {
+        impl<'a> Parseable<'a> for $type {
             type Ret = $type;
-            fn parse(sc: &mut impl Scanner) -> Self::Ret {
+            fn parse(sc: &mut impl Scanner<'a>) -> Self::Ret {
                 sc.read_token().unwrap()
             }
         }
@@ -42,10 +42,10 @@ macro_rules! impl_stdin_types {
     };
 }
 
-pub trait Parseable {
+pub trait Parseable<'a> {
     type Ret;
 
-    fn parse(sc: &mut impl Scanner) -> Self::Ret;
+    fn parse(sc: &mut impl Scanner<'a>) -> Self::Ret;
 }
 
 impl_stdin_types!(
@@ -56,14 +56,37 @@ impl_stdin_types!(
 
 impl_all_stdin_tuples!(16);
 
-pub trait Scanner {
+pub trait Scanner<'a> {
     fn read_token<T: FromStr>(&mut self) -> Result<T, <T as FromStr>::Err>;
 
-    fn read<T: Parseable<Ret = T>>(&mut self) -> T;
+    fn read<T: Parseable<'a, Ret = T>>(&mut self) -> T;
     fn read_cust_s<T: FromStr>(&mut self) -> T where T::Err: Debug;
 
-    fn read_vec<T: Parseable<Ret = T>>(&mut self, cnt: usize) -> Vec<T>;
+    fn read_vec<T: Parseable<'a, Ret = T>>(&mut self, cnt: usize) -> Vec<T>;
     fn read_cust_v<T: FromStr>(&mut self, cnt: usize) -> Vec<T> where T::Err: Debug;
+
+    fn iter<T: Parseable<'a, Ret = T>>(&'a mut self) -> ScannerIter<'a, T, Self> where Self: Scanner<'a>, Self: std::marker::Sized {
+        ScannerIter { sc: self, phantom: PhantomData }
+    }
+}
+
+pub struct ScannerIter<'a, T: Parseable<'a, Ret = T>, S: Scanner<'a>> {
+    sc: &'a mut S,
+    phantom: PhantomData<T>
+}
+
+impl<'a, T: Parseable<'a, Ret = T>, S: Scanner<'a>> ScannerIter<'a, T, S> {
+    fn next(&mut self) -> T {
+        self.sc.read::<T>()
+    }
+}
+
+impl<'a, T: Parseable<'a, Ret = T>, S: Scanner<'a>> Iterator for ScannerIter<'a, T, S> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        Some(ScannerIter::next(self))
+    }
 }
 
 //Faster scanner that will only work if Ascii characters are typed into stdin. 
@@ -89,7 +112,7 @@ impl AsciiScanner {
     }
 }
 
-impl Scanner for AsciiScanner
+impl<'a> Scanner<'a> for AsciiScanner
 {
     fn read_token<T: FromStr>(&mut self) -> Result<T, <T as FromStr>::Err>
     {
@@ -126,7 +149,7 @@ impl Scanner for AsciiScanner
         }
     }
 
-    fn read<T: Parseable<Ret = T>>(&mut self) -> T {
+    fn read<T: Parseable<'a, Ret = T>>(&mut self) -> T {
         T::parse(self)
     }
 
@@ -138,7 +161,7 @@ impl Scanner for AsciiScanner
         (0..cnt).map(|_| self.read_token::<T>().unwrap()).collect()
     }
 
-    fn read_vec<T: Parseable<Ret = T>>(&mut self, cnt: usize) -> Vec<T> {
+    fn read_vec<T: Parseable<'a, Ret = T>>(&mut self, cnt: usize) -> Vec<T> {
         (0..cnt).map(|_| T::parse(self)).collect()
     }
 }
