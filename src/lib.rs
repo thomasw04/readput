@@ -21,7 +21,7 @@
 //! ```
 //! 
 //! # Read a tuple
-//! Read a tuple with variable size (curr. max. 6 -> todo macro) and custom types. (Works with all types that impl. ```FromStr``` and ```Debug```)
+//! Read a tuple with variable size and custom types. (Works with all types that impl. ```FromStr``` and ```Debug```)
 //! ```Rust
 //! let (a, b, c): (String, i128, u32) = cin.read();
 //! let (d, e): (i32, i32) = cin.read();
