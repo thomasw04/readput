@@ -1,33 +1,36 @@
+use readput::read;
+use readput::read_vec;
 use readput::AsciiScanner;
 use readput::Scanner;
 
 fn main() {
+    // In order to read types they must implement FromStr and Debug.
     let mut cin = AsciiScanner::new();
 
-    //Read a single value. For non std types use impl_cin_type(type)! before.
-    let a: i128 = cin.read();
+    //Read a single value.
+    let a = read!(cin, i128);
 
-    //Read a tuple with variable size and custom types (need to impl FromStr and Debug). Works with all types.
-    let (b, c, d): (String, i128, u32) = cin.read();
-    let (e, f): (i32, i32) = cin.read();
+    //Read a tuple with variable size.
+    let (b, c, d) = read!(cin, (String, i128, u32));
+    let (e, f) = read!(cin, (i32, i32));
 
-    //Read a vec of tuples. cnt is the number of tuples in the vector to read. Works with all types.
-    let vec: Vec<(u32, u32)> = cin.read_vec(3);
-
-    //Read a vec of non tuples. cnt is the number of elements to read. For non std types use impl_cin_type(type)! before.
-    let vec1: Vec<u32> = cin.read_vec(3);
-
-    println!("{} {} {} {} {} {}", a, b, c, d, e, f);
-
-    for (a, b) in cin.iter::<(String, u32)>() {
-        println!("{} {}", a, b);
-    }
+    //Read a vec of tuples. 3 is the number of tuples to read.
+    let vec = read_vec!(cin, 3, (u32, u32));
 
     for x in vec {
         println!("{} {}", x.0, x.1);
     }
 
-    for x in vec1 {
+    //Read a vec of non tuples.  3 is the number of elements to read.
+    let vec: Vec<u32> = read_vec!(cin, 3, u32);
+
+    for x in vec {
         println!("{}", x);
+    }
+
+    println!("{} {} {} {} {} {}", a, b, c, d, e, f);
+
+    for (a, b) in cin.iter::<(String, u32)>() {
+        println!("{} {}", a, b);
     }
 }
