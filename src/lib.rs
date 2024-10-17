@@ -3,6 +3,7 @@
 //!
 //! # Usage
 //! **Note:** The inputs can be on the same line, or not, it doesn't make a difference. They are separated by spaces or line breaks. Excess inputs are getting cached for the next ```read()``` call.
+//! All types need to implement FromStr and Debug.
 //!
 //! # Create a Scanner
 //! Create a new ```Scanner```. (Only ASCII support for now)
@@ -14,30 +15,28 @@
 //! ```
 //!
 //! # Read a single value
-//! Read a single value. For non std types use ```impl_cin_type!(type)``` before or use ```cin.read_cust_s()```.
-//! **Note:** They also have to impl. FromStr and Debug.
+//! **Note:** They have to impl. FromStr and Debug.
 //! ```Rust
-//! let v: i128 = cin.read();
+//! let v = read!(cin, i128);
 //! ```
 //!
 //! # Read a tuple
-//! Read a tuple with variable size and custom types. (Works with all types that impl. ```FromStr``` and ```Debug```)
 //! ```Rust
-//! let (a, b, c): (String, i128, u32) = cin.read();
-//! let (d, e): (i32, i32) = cin.read();
+//! let (a, b, c) = read!(cin, (String, i128, u32));
+//! let (d, e) = read!(cin, (i32, i32));
 //! ```
 //!
 //! # Read a vector of tuples
-//! Read a vector of tuples. 3 is the number of tuples in the vector to read. (Works with all types that impl. ```FromStr``` and ```Debug```)
+//! Read a vector of tuples. 3 is the number of tuples in the vector to read.
 //! ```Rust
-//! let vec: Vec<(u32, String)> = cin.read_vec(3);
+//! let vec = read_vec!(cin, 3, (u32, String));
 //! ```
 //!
 //! # Read a vector of single values
-//! Read a vector of single values. 3 is the number of elements to read. For non std types use ```impl_cin_type!(type)``` before or use ```cin.read_cust_v()```.
+//! Read a vector of single values. 3 is the number of elements to read.
 //! **Note:** They also have to impl. FromStr and Debug.
 //! ```Rust
-//! let vec: Vec<u32> = cin.read_vec(3);
+//! let vec: Vec<u32> = read_vec!(cin, 3, u32);
 //! ```
 //!
 //! # Iterate over input
