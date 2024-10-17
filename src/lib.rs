@@ -40,9 +40,9 @@
 //! ```
 //!
 //! # Iterate over input
-//! Iterate over input. This will iterate forever. (Blocks until new input is entered) For non std types use ```impl_cin_type!(type)``` before.
+//! Iterate over input. This will iterate forever. (Blocks until new input is entered).
 //! ```Rust
-//! for (a, b) in cin.iter::<(String, u32)>() {
+//! for (a, b) in iter!(cin, (String, u32)) {
 //!     println!("{} {}", a, b);
 //! }
 //! ```
@@ -117,8 +117,11 @@ macro_rules! read_vec {
 
 #[macro_export]
 macro_rules! iter {
+    ($sc:ident, ($($type:ty),+)) => {
+        $sc.iter::<($($type),+)>()
+    };
     ($sc:ident, $type:ty) => {
-        $sc.iter::<($type,)>()
+        $sc.iter::<($type,)>().map(|x| x.0)
     };
 }
 

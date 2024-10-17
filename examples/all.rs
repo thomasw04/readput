@@ -1,3 +1,4 @@
+use readput::iter;
 use readput::read;
 use readput::read_vec;
 use readput::AsciiScanner;
@@ -30,7 +31,7 @@ fn main() {
 
     println!("{} {} {} {} {} {}", a, b, c, d, e, f);
 
-    for (a, b) in cin.iter::<(String, u32)>() {
+    for (a, b) in iter!(cin, (String, u32)) {
         println!("{} {}", a, b);
     }
 }
